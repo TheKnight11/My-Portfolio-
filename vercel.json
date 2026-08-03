@@ -1,5 +1,4 @@
 {
   "buildCommand": "astro build",
-  "framework": "astro",
-  "nodeVersion": "22.x"
+  "framework": "astro"
 }
