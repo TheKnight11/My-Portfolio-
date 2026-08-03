@@ -13,13 +13,12 @@ const iconOptions = [
 export default config({
   storage: {
     kind: 'github',
-    repo: 'TheKnight11/My-Portfolio-', // TODO: confirm this matches your repo exactly
+    repo: 'TheKnight11/My-Portfolio-',
   },
 
   singletons: {
     // ------------------------------------------------------------
-    // SITE SETTINGS — single source of truth for name, email, avatar,
-    // and social links. Hero, Contact, and the footer all read from here.
+    // SITE SETTINGS
     // ------------------------------------------------------------
     settings: singleton({
       label: 'Site Settings',
@@ -69,12 +68,11 @@ export default config({
 
     // ------------------------------------------------------------
     // HOMEPAGE SECTIONS
-    // Each singleton = one file in src/content/sections/. `order` +
-    // `visible` control position and show/hide on the page.
     // ------------------------------------------------------------
     sectionHero: singleton({
       label: 'Section: Hero',
       path: 'src/content/sections/hero',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order (lower = higher on page)', defaultValue: 1 }),
@@ -99,6 +97,7 @@ export default config({
     sectionAbout: singleton({
       label: 'Section: About',
       path: 'src/content/sections/about',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order', defaultValue: 2 }),
@@ -123,6 +122,7 @@ export default config({
     sectionProjects: singleton({
       label: 'Section: Projects',
       path: 'src/content/sections/projects',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order', defaultValue: 3 }),
@@ -136,6 +136,7 @@ export default config({
     sectionSkills: singleton({
       label: 'Section: Skills',
       path: 'src/content/sections/skills',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order', defaultValue: 4 }),
@@ -157,6 +158,7 @@ export default config({
     sectionBlogTeaser: singleton({
       label: 'Section: Blog',
       path: 'src/content/sections/blog-teaser',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order', defaultValue: 6 }),
@@ -170,6 +172,7 @@ export default config({
     sectionContact: singleton({
       label: 'Section: Contact',
       path: 'src/content/sections/contact',
+      entryLayout: 'content',
       format: { contentField: 'body' },
       schema: {
         order: fields.integer({ label: 'Order', defaultValue: 5 }),
@@ -184,13 +187,14 @@ export default config({
 
   collections: {
     // ------------------------------------------------------------
-    // PROJECTS — add / remove / reorder freely
+    // PROJECTS — edit / add / remove
     // ------------------------------------------------------------
     projects: collection({
       label: 'Projects',
       path: 'src/content/projects/*',
       slugField: 'title',
-      format: { contentField: 'body' },
+      // Explicitly set extension if your files end with .md or .mdx
+      format: { contentField: 'body', extension: 'md' }, 
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
         description: fields.text({ label: 'Short Description', multiline: true }),
@@ -218,13 +222,14 @@ export default config({
     }),
 
     // ------------------------------------------------------------
-    // BLOG — draft / edit / publish / delete freely
+    // BLOG — edit / add / remove
     // ------------------------------------------------------------
     blog: collection({
       label: 'Blog Posts',
       path: 'src/content/blog/*',
       slugField: 'title',
-      format: { contentField: 'body' },
+      // Explicitly set extension if your files end with .md or .mdx
+      format: { contentField: 'body', extension: 'md' }, 
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
         date: fields.date({ label: 'Publish Date' }),
