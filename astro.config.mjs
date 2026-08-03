@@ -10,8 +10,6 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   site: 'https://prajolkharel.vercel.app',
   integrations: [tailwind(), mdx(), markdoc(), react(), keystatic()],
-
-  output: 'hybrid',
   adapter: vercel({
     webAnalytics: {
       enabled: true,
