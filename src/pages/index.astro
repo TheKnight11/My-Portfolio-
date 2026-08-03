@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import Skills from '../components/Skills.astro';
+import BlogTeaser from '../components/BlogTeaser.astro';
+import Contact from '../components/Contact.astro';
+
+// Each section's filename (its Astro content-collection slug) IS its type —
+// no separate "section" frontmatter field to keep in sync.
+const componentMap = {
+  hero: Hero,
+  about: About,
+  projects: Projects,
+  skills: Skills,
+  'blog-teaser': BlogTeaser,
+  contact: Contact,
+};
+
+const allSections = await getCollection('sections', ({ data }) => data.visible !== false);
+const orderedSections = allSections.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const rendered = await Promise.all(
+  orderedSections.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  })
+);
+---
+<BaseLayout>
+  {rendered.map(({ entry, Content }) => {
+    const Component = componentMap[entry.slug];
+    if (!Component) return null;
+    return <Component data={entry.data} Content={Content} />;
+  })}
+</BaseLayout>

@@ -1,0 +1,6 @@
+---
+export const prerender = false;
+// Convenience redirect: anyone with the old /admin bookmark lands on the
+// new Keystatic dashboard instead.
+return Astro.redirect('/keystatic', 302);
+---

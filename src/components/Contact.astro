@@ -1,0 +1,95 @@
+---
+import { getEntry } from 'astro:content';
+import SocialIcon from './SocialIcon.astro';
+
+const { data, Content } = Astro.props;
+const settings = await getEntry('settings', 'general');
+const action = data.contactFormEndpoint || null;
+---
+<section id="contact" class="py-20 px-5 sm:px-8 bg-navy">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-paper mb-2">Get in Touch</h2>
+    <div class="text-[#a9bacb] mb-10 max-w-xl"><Content /></div>
+
+    <div class="grid lg:grid-cols-5 gap-10">
+      <form
+        id="contact-form"
+        class="lg:col-span-3 bg-white/5 border border-white/15 rounded-lg p-7"
+        {...(action ? { action, method: 'POST' } : {})}
+      >
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="name" class="block text-sm font-medium mb-1.5 text-paper">Name</label>
+            <input required type="text" id="name" name="name" class="w-full rounded-md px-4 py-2.5 text-sm bg-white/90 text-ink" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium mb-1.5 text-paper">Email</label>
+            <input required type="email" id="email" name="email" class="w-full rounded-md px-4 py-2.5 text-sm bg-white/90 text-ink" />
+          </div>
+        </div>
+        <div class="mt-5">
+          <label for="subject" class="block text-sm font-medium mb-1.5 text-paper">Subject</label>
+          <input required type="text" id="subject" name="subject" class="w-full rounded-md px-4 py-2.5 text-sm bg-white/90 text-ink" />
+        </div>
+        <div class="mt-5">
+          <label for="message" class="block text-sm font-medium mb-1.5 text-paper">Message</label>
+          <textarea required id="message" name="message" rows="5" class="w-full rounded-md px-4 py-2.5 text-sm bg-white/90 text-ink resize-none"></textarea>
+        </div>
+        <button type="submit" class="mt-6 px-6 py-3 rounded-md text-sm font-semibold bg-amber text-navy w-full sm:w-auto">Send Message</button>
+      </form>
+
+      <div class="lg:col-span-2 space-y-6">
+        <div>
+          <p class="font-mono text-xs uppercase tracking-wide text-amber mb-1">Direct Email</p>
+          <a href={`mailto:${settings.data.email}`} class="text-lg font-medium text-paper hover:underline">{settings.data.email}</a>
+        </div>
+        {settings.data.resumeFile && (
+          <div>
+            <p class="font-mono text-xs uppercase tracking-wide text-amber mb-1">Résumé</p>
+            <a href={settings.data.resumeFile} download class="text-lg font-medium text-paper hover:underline">Download PDF</a>
+          </div>
+        )}
+        {settings.data.socialLinks?.length > 0 && (
+          <div>
+            <p class="font-mono text-xs uppercase tracking-wide text-amber mb-3">Elsewhere</p>
+            <div class="flex items-center gap-5">
+              {settings.data.socialLinks.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform} class="text-paper hover:text-amber transition">
+                  <SocialIcon icon={link.icon} />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="modal-overlay" class="fixed inset-0 z-[100] hidden items-center justify-center px-5 bg-navy/60 backdrop-blur-sm">
+  <div class="bg-paper border border-line rounded-lg p-8 max-w-sm w-full text-center">
+    <h3 class="font-display font-semibold text-xl mb-2 text-navy">Message Sent</h3>
+    <p class="text-sm mb-6 text-slate">Thank you for reaching out — I'll get back to you as soon as I can.</p>
+    <button id="modal-close" class="bg-navy text-paper px-6 py-2.5 rounded-md text-sm font-semibold">Close</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const overlay = document.getElementById('modal-overlay');
+  const modalClose = document.getElementById('modal-close');
+
+  form?.addEventListener('submit', (e) => {
+    if (!form.getAttribute('action')) {
+      e.preventDefault();
+      overlay?.classList.remove('hidden');
+      overlay?.classList.add('flex');
+      form.reset();
+    }
+  });
+
+  modalClose?.addEventListener('click', () => {
+    overlay?.classList.add('hidden');
+    overlay?.classList.remove('flex');
+  });
+</script>

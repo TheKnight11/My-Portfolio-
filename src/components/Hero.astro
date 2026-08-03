@@ -1,0 +1,46 @@
+---
+import { getEntry } from 'astro:content';
+import SocialIcon from './SocialIcon.astro';
+
+const { data, Content } = Astro.props;
+const settings = await getEntry('settings', 'general');
+const avatar = data.heroImage || settings.data.avatar;
+---
+<section id="top" class="pt-20 pb-20 px-5 sm:px-8">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-5 gap-10 items-center">
+    <div class="md:col-span-3">
+      {data.eyebrow && <p class="font-mono text-xs tracking-wide text-bronze mb-3">{data.eyebrow}</p>}
+      <h1 class="font-display font-semibold text-4xl sm:text-5xl lg:text-6xl text-navy leading-tight">{settings.data.fullName}</h1>
+      {settings.data.tagline && <p class="mt-4 text-lg sm:text-xl text-slate font-medium">{settings.data.tagline}</p>}
+      <div class="mt-6 text-base sm:text-lg leading-relaxed">
+        <Content />
+      </div>
+
+      {data.ctaButtons?.length > 0 && (
+        <div class="mt-8 flex flex-wrap gap-3">
+          {data.ctaButtons.map((btn, i) => (
+            <a href={btn.url} class={i === 0 ? "bg-navy text-paper px-6 py-3 rounded-md text-sm font-semibold hover:bg-navy-2 transition" : "border-2 border-navy text-navy px-6 py-3 rounded-md text-sm font-semibold hover:bg-navy hover:text-paper transition"}>
+              {btn.label}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {settings.data.socialLinks?.length > 0 && (
+        <div class="mt-8 flex items-center gap-5">
+          {settings.data.socialLinks.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" aria-label={link.platform} class="text-navy hover:text-bronze transition">
+              <SocialIcon icon={link.icon} />
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {avatar && (
+      <div class="md:col-span-2">
+        <img src={avatar} alt={settings.data.fullName} class="rounded-lg border border-line w-full object-cover aspect-square" />
+      </div>
+    )}
+  </div>
+</section>

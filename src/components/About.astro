@@ -1,0 +1,24 @@
+---
+const { data, Content } = Astro.props;
+---
+<section id="about" class="py-20 px-5 sm:px-8 bg-paper-2">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-navy mb-10">{data.aboutTitle}</h2>
+    <div class="grid md:grid-cols-5 gap-10">
+      <div class="md:col-span-3 prose prose-lg max-w-none text-ink leading-relaxed">
+        <Content />
+      </div>
+      <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {data.values?.map((v) => (
+          <div class="bg-white/60 border border-line rounded-lg p-5">
+            <p class="font-display font-semibold text-base mb-1 text-navy">{v.title}</p>
+            <p class="text-sm text-slate">{v.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+    {data.aboutImage && (
+      <img src={data.aboutImage} alt={data.aboutTitle} class="mt-10 rounded-lg border border-line max-w-sm" />
+    )}
+  </div>
+</section>

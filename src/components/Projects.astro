@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+
+const { data } = Astro.props;
+
+const allProjects = await getCollection('projects', ({ data }) => data.visible !== false);
+const projects = allProjects.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+---
+<section id="projects" class="py-20 px-5 sm:px-8">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-navy mb-2">{data.projectsTitle}</h2>
+    {data.projectsSubtitle && <p class="text-slate mb-10">{data.projectsSubtitle}</p>}
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      {projects.map((project) => (
+        <article class="bg-white/60 border border-line rounded-lg overflow-hidden hover:-translate-y-1 hover:border-bronze transition">
+          {project.data.image && <img src={project.data.image} alt={project.data.title} class="w-full h-44 object-cover" />}
+          <div class="p-6">
+            <div class="flex flex-wrap gap-2 mb-3">
+              {project.data.tags.map((tag) => (
+                <span class="font-mono text-[0.68rem] uppercase tracking-wide bg-amber-soft text-bronze px-2 py-1 rounded-full">{tag}</span>
+              ))}
+            </div>
+            <h3 class="font-display font-semibold text-xl text-navy mb-2">{project.data.title}</h3>
+            <p class="text-sm text-slate">{project.data.description}</p>
+            <div class="mt-4 flex gap-4 text-sm font-medium">
+              {project.data.liveUrl && <a href={project.data.liveUrl} class="text-bronze hover:underline">View →</a>}
+              {project.data.repoUrl && <a href={project.data.repoUrl} class="text-bronze hover:underline">Code →</a>}
+              {project.data.downloadFile && <a href={project.data.downloadFile} download class="text-bronze hover:underline">Download PDF →</a>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
