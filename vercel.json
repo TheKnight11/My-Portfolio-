@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "node_modules/@keystatic/astro/**/*.js": {
+      "runtime": "nodejs22.x"
+    },
+    "src/pages/api/**/*.ts": {
+      "runtime": "nodejs22.x"
+    }
+  },
+  "buildCommand": "astro build",
+  "framework": "astro"
+}
